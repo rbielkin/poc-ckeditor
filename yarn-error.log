@@ -1,0 +1,31 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js --dev @babel/cli @babel/core @babel/preset-react @ckeditor/ckeditor5-basic-styles @ckeditor/ckeditor5-build-classic @ckeditor/ckeditor5-core @ckeditor/ckeditor5-dev-utils @ckeditor/ckeditor5-editor-classic @ckeditor/ckeditor5-essentials @ckeditor/ckeditor5-heading @ckeditor/ckeditor5-inspector @ckeditor/ckeditor5-link @ckeditor/ckeditor5-paragraph @ckeditor/ckeditor5-react @ckeditor/ckeditor5-table @ckeditor/ckeditor5-theme-lark @ckeditor/ckeditor5-ui @ckeditor/ckeditor5-widget babel-loader css-loader@5 postcss-loader@4 raw-loader@4 react react-dom style-loader@2 webpack@5 webpack-cli@4
+
+PATH: 
+  C:\Python39\Scripts\;C:\Python39\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Users\vfedash\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\dotnet\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\vfedash\AppData\Local\Microsoft\WindowsApps;C:\Users\vfedash\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\vfedash\.dotnet\tools
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  14.19.3
+
+Platform: 
+  win32 x64
+
+Trace: 
+  SyntaxError: D:\Work\CPQ\cpq-editor-5-widget\package.json: Unexpected end of JSON input
+      at JSON.parse (<anonymous>)
+      at C:\Users\vfedash\AppData\Roaming\nvm\v14.19.3\node_modules\yarn\lib\cli.js:1629:59
+      at Generator.next (<anonymous>)
+      at step (C:\Users\vfedash\AppData\Roaming\nvm\v14.19.3\node_modules\yarn\lib\cli.js:310:30)
+      at C:\Users\vfedash\AppData\Roaming\nvm\v14.19.3\node_modules\yarn\lib\cli.js:321:13
+
+npm manifest: 
+  
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
