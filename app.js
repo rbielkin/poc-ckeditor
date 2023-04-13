@@ -15,8 +15,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useTheme } from '@mui/material/styles';
+import { useTheme, createTheme, ThemeProvider } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import Backdrop from "@mui/material/Backdrop";
 
 // The official <CKEditor> component for React.
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -54,6 +55,18 @@ import { ProductTableEditor } from "./react/producttabbleeditor";
 const BitcoinLogoIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" preserveAspectRatio="xMidYMid" viewBox="0 0 1 1"><path d="M63.036 39.741c-4.274 17.143-21.637 27.576-38.782 23.301C7.116 58.768-3.317 41.404.959 24.262 5.23 7.117 22.594-3.317 39.734.957c17.144 4.274 27.576 21.64 23.302 38.784z" style="fill:#f7931a" transform="scale(.01563)"/><path d="M46.1 27.441c.638-4.258-2.604-6.547-7.037-8.074l1.438-5.768-3.511-.875-1.4 5.616c-.923-.23-1.871-.447-2.813-.662l1.41-5.653-3.51-.875-1.438 5.766c-.764-.174-1.514-.346-2.242-.527l.004-.018-4.842-1.209-.934 3.75s2.605.597 2.55.634c1.422.355 1.679 1.296 1.636 2.042l-3.94 15.801c-.174.432-.615 1.08-1.61.834.036.051-2.551-.637-2.551-.637l-1.743 4.019 4.569 1.139c.85.213 1.683.436 2.503.646l-1.453 5.834 3.507.875 1.439-5.772c.958.26 1.888.5 2.798.726l-1.434 5.745 3.51.875 1.454-5.823c5.987 1.133 10.489.676 12.384-4.739 1.527-4.36-.076-6.875-3.226-8.515 2.294-.529 4.022-2.038 4.483-5.155zM38.08 38.69c-1.085 4.36-8.426 2.003-10.806 1.412l1.928-7.729c2.38.594 10.012 1.77 8.878 6.317zm1.086-11.312c-.99 3.966-7.1 1.951-9.082 1.457l1.748-7.01c1.982.494 8.365 1.416 7.334 5.553z" style="fill:#fff" transform="scale(.01563)"/></svg>';
 
 const RESOURCE_URL = 'https://api2.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT';
+
+const theme = createTheme({
+    components: {
+        MuiDialog: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: "transparent",
+                },
+            },
+        },
+    },
+});
 
 class ExternalDataWidgetCommand extends Command {
     execute() {
@@ -261,7 +274,7 @@ function App () {
         gridSell: {
             gridRenderer: ( id, domElement) => {
                 ReactDOM.render(
-                    <ProductTableEditor />,
+                    <ProductTableEditor showModal={handleClickOpen} />,
                     domElement
                 )
             }
@@ -271,6 +284,7 @@ function App () {
     const editorConfig = initialEditorConfig;
     const [open, setOpen] = React.useState(false);
     const [fontColor, setFontColor] = useState(localStorage.getItem('fontColor') || '#000000');
+    const [position, setPosition] = useState({ x: 0, y: 0 });
 
     const handleChange = (event) => {
         const {
@@ -281,7 +295,9 @@ function App () {
             typeof value === 'string' ? value.split(',') : value,
         );
     };
-    const handleClickOpen = () => {
+    const handleClickOpen = (e) => {
+        e.preventDefault();
+        setPosition({ x: e.clientX, y: e.clientY });
         setOpen(true);
     };
     const handleClose = () => {
@@ -433,7 +449,27 @@ function App () {
                         Configure Grid
                     </Button>
                 </div>
-                <Dialog open={open} onClose={handleClose}>
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    PaperProps={{
+                        style: {
+                            position: "absolute",
+                            left: position.x,
+                            top: position.y,
+                        },
+                    }}
+                    components={{
+                        Backdrop: Backdrop,
+                    }}
+                    componentsProps={{
+                        backdrop: {
+                            sx: {
+                                backgroundColor: "transparent",
+                            },
+                        },
+                    }}
+                >
                     <DialogTitle>Configure the grid</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
@@ -460,7 +496,7 @@ function App () {
                                     <MenuItem value="black">black</MenuItem>
                                 </Select>
                             </FormControl>
-                            <FormControl sx={{ mt: 3, minWidth: 220 }}>
+                            <FormControl sx={{ mt: 3, minWidth: 220, maxWidth: 220 }}>
                                 <InputLabel htmlFor="demo-multiple-name-label">Columns to show</InputLabel>
                                 <Select
                                     labelId="demo-multiple-name-label"
@@ -509,37 +545,39 @@ function App () {
 
 // Render the <App> in the <div class="app"></div> element found in the DOM.
 ReactDOM.render(
-    <App
-        // Feeding the application with predefined products.
-        // In a real-life application, this sort of data would be loaded
-        // from a database. To keep this tutorial simple, a few
-        //  hard–coded product definitions will be used.
-        products={[
-            {
-                id: 1,
-                name: 'Colors of summer in Poland',
-                price: '$1500',
-                image: 'product1.jpg'
-            },
-            {
-                id: 2,
-                name: 'Mediterranean sun on Malta',
-                price: '$1899',
-                image: 'product2.jpg'
-            },
-            {
-                id: 3,
-                name: 'Tastes of Asia',
-                price: '$2599',
-                image: 'product3.jpg'
-            },
-            {
-                id: 4,
-                name: 'Exotic India',
-                price: '$2200',
-                image: 'product4.jpg'
-            }
-        ]}
-    />,
+    <ThemeProvider theme={theme}>
+        <App
+            // Feeding the application with predefined products.
+            // In a real-life application, this sort of data would be loaded
+            // from a database. To keep this tutorial simple, a few
+            //  hard–coded product definitions will be used.
+            products={[
+                {
+                    id: 1,
+                    name: 'Colors of summer in Poland',
+                    price: '$1500',
+                    image: 'product1.jpg'
+                },
+                {
+                    id: 2,
+                    name: 'Mediterranean sun on Malta',
+                    price: '$1899',
+                    image: 'product2.jpg'
+                },
+                {
+                    id: 3,
+                    name: 'Tastes of Asia',
+                    price: '$2599',
+                    image: 'product3.jpg'
+                },
+                {
+                    id: 4,
+                    name: 'Exotic India',
+                    price: '$2200',
+                    image: 'product4.jpg'
+                }
+            ]}
+        />
+    </ThemeProvider>,
     document.querySelector( '.app' )
 );

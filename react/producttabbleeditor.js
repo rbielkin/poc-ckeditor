@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
 import {
     randomCreatedDate,
     randomTraderName,
     randomUpdatedDate,
 } from '@mui/x-data-grid-generator';
-export const ProductTableEditor = () => {
+
+export const ProductTableEditor = ({showModal}) => {
 
     const ref = useRef();
     const [inputVal, setInputVal] = React.useState(localStorage.getItem('inputVal') || '');
@@ -31,6 +31,7 @@ export const ProductTableEditor = () => {
         //     <DataGrid rows={rows} columns={columns} />
         // </div>
         <table className="product-grid" id='1' ref={ref} draggable style={{color: localStorage.getItem('fontColor') || 'black', fontWeight: 'bold'}}>
+            <a href="#" className={'edit-grid-link'} onClick={showModal}>Edit grid</a>
             <thead>
                 <tr>
                     {(columnsToShow.indexOf('Id') > -1) && <th>Id</th>}

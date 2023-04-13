@@ -1,0 +1,15 @@
+.edit-grid-link {
+  position: absolute;
+  color: #000;
+  top: -25px;
+  display: none;
+  text-decoration: underline;
+}
+.ck .ck-widget.ck-widget_selected .edit-grid-link {
+  color: green;
+  display: block;
+}
+
+.ck .gridElement:hover .edit-grid-link {
+  display: block;
+}
