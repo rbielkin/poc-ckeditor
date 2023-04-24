@@ -3,6 +3,7 @@
 // Imports necessary to run a React application.
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ReactDOMServer from 'react-dom/server';
 import { useState } from 'react';
 
 import Button from '@mui/material/Button';
@@ -281,6 +282,8 @@ function App () {
         }
     };
     const [editor, setEditor] = useState(null);
+    const [editorOutput, setEditorOutput] = useState(null);
+    const [editorInput, setEditorInput] = useState(null);
     const editorConfig = initialEditorConfig;
     const [open, setOpen] = React.useState(false);
     const [fontColor, setFontColor] = useState(localStorage.getItem('fontColor') || '#000000');
@@ -386,6 +389,24 @@ function App () {
         setEditorData(editor.getData());
     }
 
+    const generateOutputData = () => {
+        const htmlString = ReactDOMServer.renderToString(<ProductTableEditor showModal={handleClickOpen} />)
+        setEditorOutput(editor.getData().replace('<section class="gridElement" data-id="[object Object]"></section>', htmlString));
+        setEditorInput(editor.getData());
+    }
+
+    const generateInputData = () => {
+        editor.setData(editorOutput);
+    }
+
+    const clearEditor = () => {
+        editor.setData('');
+    }
+
+    const generateReactEditorData = () => {
+        setEditorData(editorInput);
+    }
+
     // A handler executed when the editor has been initialized and is ready.
     // It synchronizes the initial data state and saves the reference to the editor instance.
     const handleEditorReady = ( editor ) => {
@@ -393,6 +414,7 @@ function App () {
 
         console.warn('EDITOR ---->', editor)
         setEditorData(editor.getData());
+        setEditorOutput(editor.getData());
 
         // CKEditor 5 inspector allows you to take a peek into the editor's model and view
         // data layers. Use it to debug the application and learn more about the editor.
@@ -447,6 +469,18 @@ function App () {
                     {/*}} >Insert Grid</button>*/}
                     <Button variant="outlined" onClick={handleClickOpen}>
                         Configure Grid
+                    </Button>
+                    <Button variant="outlined" onClick={generateOutputData}>
+                        Generate editor output
+                    </Button>
+                    <Button variant="outlined" onClick={generateInputData}>
+                        Populate editor with output
+                    </Button>
+                    <Button variant="outlined" onClick={clearEditor}>
+                        Clear editor
+                    </Button>
+                    <Button variant="outlined" onClick={generateReactEditorData}>
+                        Insert react data
                     </Button>
                 </div>
                 <Dialog
@@ -536,7 +570,7 @@ function App () {
                     />
 
                     <h3>Editor data</h3>
-                    <textarea value={editorData} readOnly={true}></textarea>
+                    <textarea value={editorOutput} readOnly={true}></textarea>
                 </div>
             </div>
         );
